@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
  
 /** This is a demo program showing how to use Mecanum control with the MecanumDrive class. */
-// public class Robot extends TimedRobot {
+public class Robot extends TimedRobot {
 
 //   boolean Ocupid = false;
 
@@ -146,7 +146,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 //       intakeHappy.set(0);
 //       dontfollowIntakeHappy.set(0);
-//     }
+}
     
 
 
@@ -157,7 +157,6 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 
 
 
-//   }
-// }
+
  
 
