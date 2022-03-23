@@ -59,6 +59,14 @@ public class HangRight extends SubsystemBase{
         m_rightHangEncoder.setPosition(0.0);
     }
 
+    public boolean getUpperEncoder() {
+        return m_rightLimit.get();
+    }
+
+    public boolean getLowerEncoder() {
+        return m_rightHangEncoder.get();// I have no idea if this works
+    }
+
     @Override
     public void periodic(){
         SmartDashboard.putNumber("RHang Enc",getRightHangPosition());

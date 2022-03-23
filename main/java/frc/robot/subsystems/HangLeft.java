@@ -58,6 +58,12 @@ public class HangLeft extends SubsystemBase{
     public void resetLeftHangPosition(){
         m_leftHangEncoder.setPosition(0.0);
     }
+    public boolean getUpperEncoder(){
+        return m_leftLimit.get();
+    }
+    public boolean getLowerEncoder(){
+        return m_leftHangEncoder.get();//I have no idea if this works
+    }
 
 
     @Override
