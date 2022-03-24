@@ -61,9 +61,9 @@ public class HangLeft extends SubsystemBase{
     public boolean getUpperEncoder(){
         return m_leftLimit.get();
     }
-    public boolean getLowerEncoder(){
-        return m_leftHangEncoder.get();// this work not at all as well
-    }
+    // public boolean getLowerEncoder(){
+    //     return m_leftHangEncoder.get();// this work not at all as well
+    // }
 
 
     @Override

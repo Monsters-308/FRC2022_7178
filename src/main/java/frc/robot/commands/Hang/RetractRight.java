@@ -22,9 +22,10 @@ public class RetractRight extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (m_hangSubsystem.getLowerEncoder()) {
-            return false;
-        }
         return true;
+        // if (m_hangSubsystem.getLowerEncoder()) { //this code requires encodes
+        //     return false;
+        // }
+        // return true;
     }
 }

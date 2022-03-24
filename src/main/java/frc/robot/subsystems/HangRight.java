@@ -62,9 +62,9 @@ public class HangRight extends SubsystemBase{
         return m_rightLimit.get();
     }
 
-    public boolean getLowerEncoder() {
-        return m_rightHangEncoder.get();// this doesnt work at all
-    }
+    // public boolean getLowerEncoder() {
+    //     return m_rightHangEncoder.get();// this doesnt work at all
+    // }
 
     @Override
     public void periodic(){

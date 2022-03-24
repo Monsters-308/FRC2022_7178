@@ -24,9 +24,10 @@ public class RetractLeft extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (m_hangSubsystem.getLowerEncoder()) {
-            return false;
-        }
         return true;
+        // if (m_hangSubsystem.getLowerEncoder()) {
+        //     return false;
+        // }
+        // return true;
     }
 }
