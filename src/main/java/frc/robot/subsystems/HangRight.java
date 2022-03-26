@@ -49,6 +49,9 @@ public class HangRight extends SubsystemBase{
     public void rightHangRetract(){
         m_rightDeploy.set(false);
     }
+    public void setDeployed(boolean set){
+        m_rightDeploy.set(set);
+    }
 
     public double getRightHangPosition(){
         return m_rightHangEncoder.getPosition();
@@ -62,9 +65,9 @@ public class HangRight extends SubsystemBase{
         return m_rightLimit.get();
     }
 
-    // public boolean getLowerEncoder() {
-    //     return m_rightHangEncoder.get();// this doesnt work at all
-    // }
+    public boolean getLowerEncoder() {
+        return m_rightHangEncoder.get();// this doesnt work at all
+    }
 
     @Override
     public void periodic(){

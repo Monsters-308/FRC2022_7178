@@ -67,7 +67,7 @@ public final class Constants {
     }
 
     public static final class VisionConstants{
-        public static final double kInRangeDeg = 4.0;  // if within 5 degrees of center than call it good
+        public static final double kInRangeDeg = 2.0;  // if within 5 degrees of center than call it good
 
     }
 

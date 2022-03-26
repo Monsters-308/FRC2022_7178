@@ -17,7 +17,7 @@ public class HangLeft extends SubsystemBase{
     private final CANSparkMax m_leftHang = new CANSparkMax(HangConstants.kLeftHangMotorPort, MotorType.kBrushless);
     private final Solenoid m_leftDeploy = new Solenoid(CompressorConstants.kModuleID,PneumaticsModuleType.CTREPCM,HangConstants.kLeftDeployPort);
 
-    private RelativeEncoder m_leftHangEncoder = m_leftHang.getEncoder();
+    private RelativeEncoder m_leftEncoder = m_leftHang.getEncoder();
 
     private DigitalInput m_leftLimit = new DigitalInput(2);
 
@@ -50,20 +50,23 @@ public class HangLeft extends SubsystemBase{
     public void leftHangRetract(){
         m_leftDeploy.set(false);
     }
+    public void setDeployed(boolean set){
+        m_leftDeploy.set(set);
+    }
 
     public double getLeftHangPosition(){
-        return m_leftHangEncoder.getPosition();
+        return m_leftEncoder.getPosition();
     }
 
     public void resetLeftHangPosition(){
-        m_leftHangEncoder.setPosition(0.0);
+        m_leftEncoder.setPosition(0.0);
     }
     public boolean getUpperEncoder(){
         return m_leftLimit.get();
     }
-    // public boolean getLowerEncoder(){
-    //     return m_leftHangEncoder.get();// this work not at all as well
-    // }
+    public boolean getLowerEncoder(){
+        return m_leftEncoder.get();// this work not at all as well
+    }
 
 
     @Override
