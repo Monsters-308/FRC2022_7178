@@ -64,8 +64,8 @@ public class HangLeft extends SubsystemBase{
     public boolean getUpperEncoder(){
         return m_leftLimit.get();
     }
-    public boolean getLowerEncoder(){
-        return m_leftEncoder.get();// this work not at all as well
+    public double getLowerEncoderVelocity(){
+        return m_leftEncoder.getVelocity();// this work not at all as well
     }
 
 

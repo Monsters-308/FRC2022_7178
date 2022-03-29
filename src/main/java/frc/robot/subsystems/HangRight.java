@@ -65,8 +65,8 @@ public class HangRight extends SubsystemBase{
         return m_rightLimit.get();
     }
 
-    public boolean getLowerEncoder() {
-        return m_rightHangEncoder.get();// this doesnt work at all
+    public double getLowerEncoderVelocity() {
+        return m_rightHangEncoder.getVelocity();// this doesnt work at all
     }
 
     @Override
