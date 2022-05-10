@@ -6,23 +6,24 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.HangLeft;
 import frc.robot.subsystems.HangRight;
+import frc.robot.commands.Hang.ExtendLeft;
 import frc.robot.commands.Hang.ExtendRight;
+import frc.robot.commands.Hang.RetractLeft;
 import frc.robot.commands.Hang.RetractRight;
 import frc.robot.commands.Hang.SetLeft;
 import frc.robot.commands.Hang.SetRight;
 
-public class AutoFirstRung extends SequentialCommandGroup  {
+public class AutoMidRung extends SequentialCommandGroup  {
 
 
-    public AutoFirstRung(HangLeft left, HangRight right){
+    public AutoMidRung(HangLeft left, HangRight right){
         addCommands(
             new SequentialCommandGroup(
-                new SetRight(right, true),
-                new SetLeft(left, true),
-                new ExtendRight(right),
+                new ExtendLeft(left),
                 new WaitCommand(7.0),
-                new SetRight(right, false),
-                new RetractRight(right)
+                new SetLeft(left, false),
+                new RetractLeft(left),
+                new SetRight(right, true)
             )
         );
         

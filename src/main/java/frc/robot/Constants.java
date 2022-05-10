@@ -40,6 +40,7 @@ public final class Constants {
     public static final class ShooterConstants{
         public static final int kUpperShooterMotorPort = 13;
         public static final double kUpperShooterMotorSpeed = 0.35;
+        public static final double kUpperShooterMotorSpeed2 = 0.55;
         public static final int kLowerShooterMotorPort = 14;
         public static final double kLowerShooterMotorSpeed = 0.6;
         public static final int kAssistMotorPort = 8;
@@ -47,15 +48,15 @@ public final class Constants {
 
         public static final double kUpperShooterSpeed = 12000;
         public static final double kLowerShooterSpeed = 12000;
-        public static final long kMaxIndexTimeMS = 2000; // time to determine we have no more balls in the indexer
-        public static final long kMaxRampTimeMS = 2000; // time to deterine we have a stable speed
+        public static final long kMaxIndexTimeMS = 1000; // time to determine we have no more balls in the indexer
+        public static final long kMaxRampTimeMS = 1000; // time to determine we have a stable speed
         public static final long kMaxReleaseTimeMS = 100; // time to recoginze we released a ball from the indexer
     }
 
     public static final class HangConstants{
         public static final int kRightHangMotorPort = 16;
         public static final int kLeftHangMotorPort = 15;
-        public static final double kHangMotorSpeed = .75;
+        public static final double kHangMotorSpeed = 1;
         public static final int kLeftDeployPort = 2;
         public static final int kRightDeployPort = 1;
         public static final int kCurrentLimit = 40; // 40A current limit for motors eventhough it could be higher but not higher than 50A as the rating is 40A @80%

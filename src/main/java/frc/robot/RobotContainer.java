@@ -4,15 +4,24 @@
 
 package frc.robot;
 
+//import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.OIConstants;
+//import frc.robot.commands.Auto.AutoFinishRung;
 import frc.robot.commands.Auto.AutonDoNothing;
 import frc.robot.commands.Auto.AutonTaxiOnly;
 import frc.robot.commands.Auto.AutonTaxiTwoBall;
+//import frc.robot.commands.Hang.ExtendLeft;
+//import frc.robot.commands.Hang.ExtendRight;
+//import frc.robot.commands.Hang.RetractLeft;
+//import frc.robot.commands.Hang.RetractRight;
+//import frc.robot.commands.Hang.StopLeft;
+//import frc.robot.commands.Hang.StopRight;
 import frc.robot.commands.chassis.AutoAim;
 import frc.robot.commands.chassis.DefaultDrive;
 import frc.robot.commands.indexer.AutoIndexer;
@@ -35,222 +44,211 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+//import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final Chassis m_chassisSubsystem = new Chassis();
-  private final Intake m_intakeSubsystem = new Intake();
-  private final Indexer m_indexerSubsystem = new Indexer();
-  private final Traverse m_traverseSubsystem = new Traverse();
-  private final Shooter m_shooterSubsystem = new Shooter();
-  private final Vision m_visionSubsystem = new Vision();
-  private final HangLeft m_hangLeftSubsystem = new HangLeft();
-  private final HangRight m_hangRightSubsystem = new HangRight();
-  private final LED m_ledSubsystem = new LED();
-
-  XboxController m_driverController = new XboxController(OIConstants.kDriverPort);
-  XboxController m_codriverController = new XboxController(OIConstants.kCoDriverPort);
-
-  SendableChooser<Command> m_autonChooser = new SendableChooser<>();
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
-    m_chassisSubsystem.setDefaultCommand(
-      new DefaultDrive(m_chassisSubsystem,
-      () -> -m_driverController.getLeftY(),
-      () -> m_driverController.getLeftX(),
-      () -> m_driverController.getRightX()));
-
-
-      m_hangLeftSubsystem.leftHangDeploy();
-      m_hangRightSubsystem.rightHangDeploy();
-
-      m_autonChooser.addOption("AutonDoNothing",new AutonDoNothing());
-      m_autonChooser.addOption("AutonTaxiOnly",new AutonTaxiOnly(m_chassisSubsystem));
-      m_autonChooser.addOption("AutonTaxiTwoBall", new AutonTaxiTwoBall(m_chassisSubsystem,m_intakeSubsystem,m_indexerSubsystem,m_traverseSubsystem,m_shooterSubsystem));
-
-    Shuffleboard.getTab("Autonomous").add(m_autonChooser).withSize(2,1);
-
-  }
-
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-
-    /**************************
-     * Driver Button Commands *
-    ***************************/
-    // Dpad Down Button Auto AIM 
+    // The robot's subsystems and commands are defined here...
+    private final Chassis m_chassisSubsystem = new Chassis();
+    private final Intake m_intakeSubsystem = new Intake();
+    private final Indexer m_indexerSubsystem = new Indexer();
+    private final Traverse m_traverseSubsystem = new Traverse();
+    private final Shooter m_shooterSubsystem = new Shooter(m_indexerSubsystem);
+    private final Vision m_visionSubsystem = new Vision();
+    private final HangLeft m_hangLeftSubsystem = new HangLeft();
+    private final HangRight m_hangRightSubsystem = new HangRight();
+    private final LED m_ledSubsystem = new LED();
     
-    
-    
-    
-    new JoystickButton(m_driverController,Button.kB.value)
-    .whenPressed(
-     new SequentialCommandGroup(
-       new InstantCommand(m_ledSubsystem::setRed,m_ledSubsystem),
-       new AutoAim(m_chassisSubsystem, m_visionSubsystem),
-       new InstantCommand(m_ledSubsystem::setGreen,m_ledSubsystem)
-     )
-   )
-    .whenReleased(
-      new InstantCommand(m_ledSubsystem::setBlue,m_ledSubsystem)
-    );
 
-    // Dpad Up Button raise intake
+    XboxController m_driverController = new XboxController(OIConstants.kDriverPort);
+    XboxController m_codriverController = new XboxController(OIConstants.kCoDriverPort);
 
-    // X Button Left Hang Arm Up
-    new JoystickButton(m_driverController,Button.kX.value)
-    .whenPressed(
-        new InstantCommand(m_hangLeftSubsystem::leftHangUp,m_hangLeftSubsystem)
-    )
-    .whenReleased(
-      new InstantCommand(m_hangLeftSubsystem::leftHangStop,m_hangLeftSubsystem)
-    );
+    SendableChooser<Command> m_autonChooser = new SendableChooser<>();
 
-    // Left Bumper Button Left Hang Arm Down
-    new JoystickButton(m_driverController,Button.kLeftBumper.value)
-    .whenPressed(
-        new InstantCommand(m_hangLeftSubsystem::leftHangDown,m_hangLeftSubsystem)
-    )
-    .whenReleased(
-      new InstantCommand(m_hangLeftSubsystem::leftHangStop,m_hangLeftSubsystem)
-    );
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        // Configure the button bindings
+        configureButtonBindings();
+        m_chassisSubsystem.setDefaultCommand(
+                new DefaultDrive(m_chassisSubsystem,
+                        () -> -m_driverController.getLeftY(),
+                        () -> m_driverController.getLeftX(),
+                        () -> m_driverController.getRightX()));
 
-    // Right bumper Button Right Hang Arm Up
-    new JoystickButton(m_driverController,Button.kRightBumper.value)
-    .whenPressed(
-         new InstantCommand(m_hangRightSubsystem::rightHangUp,m_hangRightSubsystem)
-    )
-    .whenReleased(
-        new InstantCommand(m_hangRightSubsystem::rightHangStop,m_hangRightSubsystem)
-    );
+        m_hangLeftSubsystem.leftHangDeploy();
+        m_hangRightSubsystem.rightHangDeploy();
 
-    // Y Button Right Hang Arm Down
-    new JoystickButton(m_driverController,Button.kY.value) 
-    .whenPressed(
-        new InstantCommand(m_hangRightSubsystem::rightHangDown,m_hangRightSubsystem)
-    )
-    .whenReleased(
-      new InstantCommand(m_hangRightSubsystem::rightHangStop,m_hangRightSubsystem)
-    );
+        m_autonChooser.addOption("AutonDoNothing", new AutonDoNothing(m_chassisSubsystem, m_intakeSubsystem, m_shooterSubsystem, m_indexerSubsystem, m_traverseSubsystem, m_ledSubsystem, m_hangLeftSubsystem, m_hangRightSubsystem));
+        m_autonChooser.addOption("AutonTaxiOnly", new AutonTaxiOnly(m_chassisSubsystem));
+        m_autonChooser.addOption("AutonTaxiTwoBall", new AutonTaxiTwoBall(m_chassisSubsystem, m_intakeSubsystem,
+                m_indexerSubsystem, m_traverseSubsystem, m_shooterSubsystem,m_hangLeftSubsystem,m_hangRightSubsystem));
 
-    // Back Button Left Hang Deploy
-    new JoystickButton(m_driverController,Button.kBack.value)
-    .whenPressed(
-      new InstantCommand(m_hangLeftSubsystem::leftHangDeploy,m_hangLeftSubsystem)
-    );
+        Shuffleboard.getTab("Autonomous").add(m_autonChooser).withSize(2, 1);
 
-    // Start Button Right Hang Deploy
-    new JoystickButton(m_driverController,Button.kStart.value)
-    .whenPressed(
-      new InstantCommand(m_hangRightSubsystem::rightHangDeploy,m_hangRightSubsystem)
-    );
+    }
 
-    /**************************
-     * Co Driver Button Commands *
-    ***************************/  
-     new JoystickButton(m_codriverController,Button.kStart.value)
-   .whenPressed(
-     new InstantCommand(m_intakeSubsystem::intakeRetract,m_intakeSubsystem)
-   );
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
+        
+        /**************************
+         * Driver Button Commands *
+         ***************************/
+        // Dpad Down Button Auto AIM
 
+        // B, X, Y, LeftBump, RightBump, Back, Start
 
+        new JoystickButton(m_driverController, Button.kB.value)
+                .whenPressed(
+                        new SequentialCommandGroup(
+                                new InstantCommand(m_ledSubsystem::setRed, m_ledSubsystem),
+                                new AutoAim(m_chassisSubsystem, m_visionSubsystem),
+                                new InstantCommand(m_ledSubsystem::setGreen, m_ledSubsystem)))
+                .whenReleased(
+                        new InstantCommand(m_ledSubsystem::setBlue, m_ledSubsystem));
 
-    // A Button Auto Intake
-    new JoystickButton(m_codriverController, Button.kA.value)
-    .whenPressed(
-      new SequentialCommandGroup(
-        new InstantCommand(m_ledSubsystem::setRed,m_ledSubsystem),
-        new AutoIndexer(m_intakeSubsystem, m_indexerSubsystem, m_traverseSubsystem),
-        new InstantCommand(m_ledSubsystem::setGreen,m_ledSubsystem)
-      )
-    )
-    .whenReleased(
-      new ParallelCommandGroup(
-        new InstantCommand(m_ledSubsystem::setBlue,m_ledSubsystem),
-        new StopIntake(m_intakeSubsystem),
-        new StopTraverse(m_traverseSubsystem),
-        new StopIndexer(m_indexerSubsystem)
-      )
-    );
+        // Trigger a=new Trigger(() -> m_driverController.getLeftTriggerAxis() > 0.3);
+        //new Trigger(() -> m_driverController.getLeftTriggerAxis() > 0.3)
+                //.whenActive(new RetractLeft(m_hangLeftSubsystem));
+                // .whenInactive(new StopLeft(m_hangLeftSubsystem));
+        //new Trigger(() -> m_driverController.getRightTriggerAxis() > 0.3)
+                //.whenActive(new RetractRight(m_hangRightSubsystem));
+//                //.whenInactive(new StopRight(m_hangRightSubsystem));
+        //new JoystickButton(m_driverController, Button.kRightBumper.value) // auto hang end
+//.whenPressed(new ExtendRight(m_hangRightSubsystem))
+                ////.whenReleased(new StopRight(m_hangRightSubsystem));
+        //new JoystickButton(m_driverController, Button.kLeftBumper.value) // auto hang end
+                //.whenPressed(new ExtendLeft(m_hangLeftSubsystem))
+                //.whenReleased(new StopLeft(m_hangLeftSubsystem));
 
-    // X Button Auto Shoot
-    new JoystickButton(m_codriverController, Button.kX.value)
-    .whenPressed(
-      new SequentialCommandGroup(
-        new InstantCommand(m_ledSubsystem::setRed,m_ledSubsystem),
-        new AutoShooter(m_indexerSubsystem,m_shooterSubsystem),
-        new InstantCommand(m_ledSubsystem::setGreen,m_ledSubsystem)
-      )
-    )
-    .whenReleased(
-      new ParallelCommandGroup(
-        new InstantCommand(m_ledSubsystem::setBlue,m_ledSubsystem),
-        new StopIndexer(m_indexerSubsystem),
-        new StopShooter(m_shooterSubsystem)
-      )
-    );
+        // Dpad Up Button raise intake
 
-    // Y Button Reverse intake / traverse / index system
-    new JoystickButton(m_codriverController, Button.kY.value)
-    .whenPressed(
-      new ParallelCommandGroup(
-        new InstantCommand(m_ledSubsystem::setPurpleBlink,m_ledSubsystem),
-        new InstantCommand(m_intakeSubsystem::intakeReverse,m_intakeSubsystem),
-        new InstantCommand(m_traverseSubsystem::traverseReverse,m_traverseSubsystem),
-        new InstantCommand(m_indexerSubsystem::indexerReverse,m_indexerSubsystem)
-      )
-    )
-    .whenReleased(
-      new ParallelCommandGroup(
-        new InstantCommand(m_ledSubsystem::setBlue,m_ledSubsystem),
-        new InstantCommand(m_intakeSubsystem::intakeOff,m_intakeSubsystem),
-        new InstantCommand(m_traverseSubsystem::traverseOff,m_traverseSubsystem),
-        new InstantCommand(m_indexerSubsystem::indexerOff,m_indexerSubsystem)
-      )
-    );
+        // X Button Left Hang Arm down
+        new JoystickButton(m_driverController, Button.kX.value)
+                .whenPressed(
+                    new InstantCommand(m_hangLeftSubsystem::leftHangDown, m_hangLeftSubsystem))
+                .whenReleased(
+                    new InstantCommand(m_hangLeftSubsystem::leftHangStop, m_hangLeftSubsystem));
 
-    // B Button Manual Runn intake / traverse / index system
-    new JoystickButton(m_codriverController, Button.kB.value)
-    .whenPressed(
-      new ParallelCommandGroup(
-        new InstantCommand(m_ledSubsystem::setPurple,m_ledSubsystem),
-        new InstantCommand(m_intakeSubsystem::intakeOn,m_intakeSubsystem),
-        new InstantCommand(m_traverseSubsystem::traverseOn,m_traverseSubsystem),
-        new InstantCommand(m_indexerSubsystem::indexerOn,m_indexerSubsystem)
-      )
-    )
-    .whenReleased(
-      new ParallelCommandGroup(
-        new InstantCommand(m_ledSubsystem::setBlue,m_ledSubsystem),
-        new InstantCommand(m_intakeSubsystem::intakeOff,m_intakeSubsystem),
-        new InstantCommand(m_traverseSubsystem::traverseOff,m_traverseSubsystem),
-        new InstantCommand(m_indexerSubsystem::indexerOff,m_indexerSubsystem)
-      )
-    );
+        // Left Bumper Button Left Hang Arm Down
+        new JoystickButton(m_driverController, Button.kLeftBumper.value)
+                .whenPressed(
+                        new InstantCommand(m_hangLeftSubsystem::leftHangUp, m_hangLeftSubsystem))
+                .whenReleased(
+                        new InstantCommand(m_hangLeftSubsystem::leftHangStop, m_hangLeftSubsystem));
 
-  }
+        // Right bumper Button Right Hang Arm Up
+        new JoystickButton(m_driverController, Button.kRightBumper.value)
+                .whenPressed(
+                        new InstantCommand(m_hangRightSubsystem::rightHangUp, m_hangRightSubsystem))
+                .whenReleased(
+                        new InstantCommand(m_hangRightSubsystem::rightHangStop, m_hangRightSubsystem));
 
+        // // Y Button Right Hang Arm Down
+        new JoystickButton(m_driverController, Button.kY.value)
+                .whenPressed(
+                    new InstantCommand(m_hangRightSubsystem::rightHangDown, m_hangRightSubsystem))
+                .whenReleased(
+                    new InstantCommand(m_hangRightSubsystem::rightHangStop, m_hangRightSubsystem));
 
+        // Back Button Left Hang Deploy
+        new JoystickButton(m_driverController, Button.kBack.value)
+                .whenPressed(
+                        new InstantCommand(m_hangLeftSubsystem::leftHangDeploy, m_hangLeftSubsystem));
 
-  // private Command SequentialCommandGroup(InstantCommand instantCommand, InstantCommand instantCommand2) {
-  //   return null;
-  // }
+        // Start Button Right Hang Deploy
+        new JoystickButton(m_driverController, Button.kStart.value)
+                .whenPressed(
+                        new InstantCommand(m_hangRightSubsystem::rightHangDeploy, m_hangRightSubsystem));
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autonChooser.getSelected();
-  }
+        /**************************
+         * Co Driver Button Commands *
+         ***************************/
+
+        // Start, A, X, Y, B,
+
+        new JoystickButton(m_codriverController, Button.kStart.value)
+                .whenPressed(
+                        new InstantCommand(m_intakeSubsystem::intakeRetract, m_intakeSubsystem));
+
+        // A Button Auto Intake
+        new JoystickButton(m_codriverController, Button.kA.value)
+                .whenPressed(
+                        new SequentialCommandGroup(
+                                new InstantCommand(m_ledSubsystem::setRed, m_ledSubsystem),
+                                new AutoIndexer(m_intakeSubsystem, m_indexerSubsystem, m_traverseSubsystem, m_shooterSubsystem),
+                                new InstantCommand(m_ledSubsystem::setGreen, m_ledSubsystem)))
+                .whenReleased(
+                        new ParallelCommandGroup(
+                                new InstantCommand(m_ledSubsystem::setBlue, m_ledSubsystem),
+                                new StopIntake(m_intakeSubsystem),
+                                new StopTraverse(m_traverseSubsystem),
+                                new StopIndexer(m_indexerSubsystem)));
+
+        // X Button Auto Shoot
+        new JoystickButton(m_codriverController, Button.kX.value)
+                .whenPressed(
+                        new SequentialCommandGroup(
+                                new InstantCommand(m_ledSubsystem::setRed, m_ledSubsystem),
+                                new AutoShooter(m_indexerSubsystem, m_shooterSubsystem),
+                                new InstantCommand(m_ledSubsystem::setGreen, m_ledSubsystem)))
+                .whenReleased(
+                        new ParallelCommandGroup(
+                                new InstantCommand(m_ledSubsystem::setBlue, m_ledSubsystem),
+                                new StopIndexer(m_indexerSubsystem),
+                                new StopShooter(m_shooterSubsystem)));
+
+        // Y Button Reverse intake / traverse / index system
+        new JoystickButton(m_codriverController, Button.kY.value)
+                .whenPressed(
+                        new ParallelCommandGroup(
+                                new InstantCommand(m_ledSubsystem::setPurpleBlink, m_ledSubsystem),
+                                new InstantCommand(m_intakeSubsystem::intakeReverse, m_intakeSubsystem),
+                                new InstantCommand(m_traverseSubsystem::traverseReverse, m_traverseSubsystem),
+                                new InstantCommand(m_indexerSubsystem::indexerReverse, m_indexerSubsystem)))
+                .whenReleased(
+                        new ParallelCommandGroup(
+                                new InstantCommand(m_ledSubsystem::setBlue, m_ledSubsystem),
+                                new InstantCommand(m_intakeSubsystem::intakeOff, m_intakeSubsystem),
+                                new InstantCommand(m_traverseSubsystem::traverseOff, m_traverseSubsystem),
+                                new InstantCommand(m_indexerSubsystem::indexerOff, m_indexerSubsystem)));
+
+        // B Button Manual Runn intake / traverse / index system
+        new JoystickButton(m_codriverController, Button.kB.value)
+                .whenPressed(
+                        new ParallelCommandGroup(
+                                new InstantCommand(m_ledSubsystem::setPurple, m_ledSubsystem),
+                                new InstantCommand(m_intakeSubsystem::intakeOn, m_intakeSubsystem),
+                                new InstantCommand(m_traverseSubsystem::traverseOn, m_traverseSubsystem),
+                                new InstantCommand(m_indexerSubsystem::indexerOn, m_indexerSubsystem)))
+                .whenReleased(
+                        new ParallelCommandGroup(
+                                new InstantCommand(m_ledSubsystem::setBlue, m_ledSubsystem),
+                                new InstantCommand(m_intakeSubsystem::intakeOff, m_intakeSubsystem),
+                                new InstantCommand(m_traverseSubsystem::traverseOff, m_traverseSubsystem),
+                                new InstantCommand(m_indexerSubsystem::indexerOff, m_indexerSubsystem)));
+
+    }
+
+    // private Command SequentialCommandGroup(InstantCommand instantCommand,
+    // InstantCommand instantCommand2) {
+    // return null;
+    // }
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        // An ExampleCommand will run in autonomous
+        return m_autonChooser.getSelected();
+    }
 }

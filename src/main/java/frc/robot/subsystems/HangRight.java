@@ -19,21 +19,22 @@ public class HangRight extends SubsystemBase{
 
     private RelativeEncoder m_rightHangEncoder = m_rightHang.getEncoder();
 
-    private DigitalInput m_rightLimit = new DigitalInput(3);
+    private DigitalInput m_rightLimit = new DigitalInput(2);
 
     public HangRight(){
         m_rightHang.restoreFactoryDefaults();
         m_rightHang.setSmartCurrentLimit(HangConstants.kCurrentLimit);
-
+        m_rightHang.setInverted(false);
         m_rightHang.setIdleMode(IdleMode.kBrake);
+        m_rightDeploy.set(false);
     }
 
 
     public void rightHangUp(){
-        m_rightHang.set(HangConstants.kHangMotorSpeed);
+        m_rightHang.set(-1*HangConstants.kHangMotorSpeed);
     }
     public void rightHangDown(){
-        m_rightHang.set(-HangConstants.kHangMotorSpeed);
+        m_rightHang.set(HangConstants.kHangMotorSpeed);
     }
     public void rightHangStop(){
         m_rightHang.set(0.0);
@@ -61,12 +62,12 @@ public class HangRight extends SubsystemBase{
         m_rightHangEncoder.setPosition(0.0);
     }
 
-    public boolean getUpperEncoder() {
+    public boolean getMidLimit() {
         return m_rightLimit.get();
     }
 
-    public double getLowerEncoderVelocity() {
-        return m_rightHangEncoder.getVelocity();// this doesnt work at all
+    public boolean getLowLimit(){
+        return m_rightHang.get()==0;
     }
 
     @Override
@@ -74,6 +75,15 @@ public class HangRight extends SubsystemBase{
         SmartDashboard.putNumber("RHang Enc",getRightHangPosition());
         SmartDashboard.putBoolean("RHang Sol",m_rightDeploy.get());
         SmartDashboard.putBoolean("RHang Limit",m_rightLimit.get());
+        SmartDashboard.putNumber("RHang Current", m_rightHang.getOutputCurrent());
+        if(!m_rightDeploy.get()){
+            if(m_rightHang.get()>0.2){
+                if(m_rightLimit.get()){
+                    m_rightHang.set(0.0);
+                }
+                
+            }
+        }
     }
     
 }

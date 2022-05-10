@@ -32,6 +32,7 @@ public class AutoShooter extends CommandBase{
 
     @Override
     public void initialize(){
+        m_shooterSubsystem.shooting=true;
         if(!m_indexerSubsystem.getIndexerSensor()){
             m_shooterStage = ShooterStage.BALL_READY;
             SmartDashboard.putString("Shooter State","BALL READY");
@@ -56,6 +57,7 @@ public class AutoShooter extends CommandBase{
                     SmartDashboard.putString("Shooter State","EMPTY");
                 }else{
                     m_indexerSubsystem.indexerOn();
+                    
                 }
                 break;
             case BALL_READY: // Pass through Stage to start the Shooter and assist motors
@@ -95,7 +97,6 @@ public class AutoShooter extends CommandBase{
                 break;
             case EMPTY:
                 m_indexerSubsystem.indexerOff();
-                m_shooterSubsystem.shooterOff();
                 m_shooterSubsystem.assistOff();
                 m_complete = true;
                 break;
@@ -103,6 +104,7 @@ public class AutoShooter extends CommandBase{
     }
     @Override
     public boolean isFinished(){
+        m_shooterSubsystem.shooting=false;
         return m_complete;
     }
 }

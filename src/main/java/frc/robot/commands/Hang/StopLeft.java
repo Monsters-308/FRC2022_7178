@@ -7,11 +7,11 @@ import frc.robot.subsystems.HangLeft;
 
 public class StopLeft extends CommandBase {
     HangLeft m_hangSubsystem;
-    boolean state;
+    //boolean state;
 
-    public StopLeft(HangLeft hang, boolean state) {
+    public StopLeft(HangLeft hang) {
         m_hangSubsystem = hang;
-        this.state=state;
+        //this.state=state;
     }
 
     @Override

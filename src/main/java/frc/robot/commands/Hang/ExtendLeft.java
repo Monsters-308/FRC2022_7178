@@ -24,9 +24,6 @@ public class ExtendLeft extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (m_hangSubsystem.getUpperEncoder()) {
-            return false;
-        }
         return true;
     }
 }

@@ -24,8 +24,7 @@ public class AutonomousBackAndShoot extends SequentialCommandGroup  {
         addCommands(
             new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                    new AutoIndexer(intake,indexer,traverse),
-                    new DriveDistance(-10, -.2, chassis)
+                    new DriveDistance(40, -.12, chassis)
                 ),
                 new ParallelCommandGroup(
                     new AutoShooter(indexer,shooter)

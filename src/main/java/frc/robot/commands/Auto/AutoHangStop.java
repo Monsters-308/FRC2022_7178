@@ -15,8 +15,8 @@ public class AutoHangStop extends SequentialCommandGroup {
             new SequentialCommandGroup(
                 new SetRight(right, true),
                 new SetLeft(left, true),
-                new StopLeft(left, true),
-                new StopRight(right,true)
+                new StopLeft(left),
+                new StopRight(right)
                 
             )
         );

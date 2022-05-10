@@ -2,7 +2,6 @@ package frc.robot.commands.Hang;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.HangLeft;
-import frc.robot.subsystems.HangRight;
 
 //package frc.robot.commands.Hang;
 

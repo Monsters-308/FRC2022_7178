@@ -22,9 +22,9 @@ public class ExtendRight extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (m_hangSubsystem.getUpperEncoder()) {
-            return false;
-        }
+        // if (m_hangSubsystem.getUpperEncoder()) {
+        //     return false;
+        // }
         return true;
     }
 }

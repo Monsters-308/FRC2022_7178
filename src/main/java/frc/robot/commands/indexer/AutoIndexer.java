@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Traverse;
+import frc.robot.subsystems.Shooter;
 
 public class AutoIndexer extends CommandBase {
 
@@ -18,16 +19,18 @@ public class AutoIndexer extends CommandBase {
     private final Intake m_intakeSubsystem;
     private final Indexer m_indexerSubsystem;
     private final Traverse m_traverseSubsystem;
+    private final Shooter m_Shooter;
     public IndexerStage m_loadingStage = IndexerStage.EMPTY;
     public boolean m_complete = false; // used to stop the command
 
-    public AutoIndexer(Intake intakeSubsystem, Indexer indexerSubsystem, Traverse traverseSubsystem){
+    public AutoIndexer(Intake intakeSubsystem, Indexer indexerSubsystem, Traverse traverseSubsystem, Shooter shooterSubsystem){
         m_intakeSubsystem = intakeSubsystem;
         m_indexerSubsystem = indexerSubsystem;
         m_traverseSubsystem = traverseSubsystem;
+        m_Shooter = shooterSubsystem;
         addRequirements(m_intakeSubsystem, m_indexerSubsystem, m_traverseSubsystem);
     }
-
+ 
     @Override
     public void initialize(){
         m_intakeSubsystem.intakeDeploy();
@@ -76,6 +79,7 @@ public class AutoIndexer extends CommandBase {
                     m_indexerSubsystem.indexerOn();
                     m_intakeSubsystem.intakeOn();
                     m_traverseSubsystem.traverseOn();
+                    m_Shooter.shooterOn25();
                 }
                 break;
             case BALL_INDEXED:
