@@ -17,7 +17,7 @@ public class StopShooter extends CommandBase{
         m_shooterSubsystem.assistOff();
         m_shooterSubsystem.shooterOff();
     }
-
+//e
     @Override
     public boolean isFinished(){
         return true;
