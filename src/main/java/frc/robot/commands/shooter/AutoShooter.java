@@ -57,7 +57,7 @@ public class AutoShooter extends CommandBase{
                     SmartDashboard.putString("Shooter State","EMPTY");
                 }else{
                     m_indexerSubsystem.indexerOn();
-                    
+
                 }
                 break;
             case BALL_READY: // Pass through Stage to start the Shooter and assist motors
@@ -98,6 +98,7 @@ public class AutoShooter extends CommandBase{
             case EMPTY:
                 m_indexerSubsystem.indexerOff();
                 m_shooterSubsystem.assistOff();
+                m_shooterSubsystem.shooterOff();//this may be unesessary but ok
                 m_complete = true;
                 break;
         }
