@@ -48,7 +48,7 @@ public final class Constants {
 
         public static final double kUpperShooterSpeed = 12000;
         public static final double kLowerShooterSpeed = 12000;
-        public static final long kMaxIndexTimeMS = 1000; // time to determine we have no more balls in the indexer
+        public static final long kMaxIndexTimeMS = 1500; // time to determine we have no more balls in the indexer
         public static final long kMaxRampTimeMS = 1000; // time to determine we have a stable speed
         public static final long kMaxReleaseTimeMS = 100; // time to recoginze we released a ball from the indexer
     }

@@ -85,15 +85,19 @@ public class AutoShooter extends CommandBase{
                 break;
             case SHOOTING:
                 // bassically we want to keep indexing until we see a ball
-                if(m_indexerSubsystem.getIndexerSensor() && (System.currentTimeMillis() - m_sysTime) > ShooterConstants.kMaxReleaseTimeMS){// if we no longer see a ball for more than 100 ms then advance back to INDEXING
+                if(!m_indexerSubsystem.getIndexerSensor()){ // if we still have the ball in the indexer
+                    m_indexerSubsystem.indexerOn();
+                    m_sysTime = System.currentTimeMillis(); // reset the time latch
+                }
+                else if((System.currentTimeMillis() - m_sysTime) > ShooterConstants.kMaxReleaseTimeMS){// if we no longer see a ball for more than 100 ms then advance back to INDEXING
+                    // if(m_indexerSubsystem.getIndexerSensor()){
+                        //use if you want to index only if there is another ball
+                    // }
                     m_indexerSubsystem.indexerOff();
                     m_shooterStage = ShooterStage.INDEXING; // reset the system to process another ball
                     m_sysTime = System.currentTimeMillis();
                     SmartDashboard.putString("Shooter State","INDEXING");
-                }else if(!m_indexerSubsystem.getIndexerSensor()){ // if we still have the ball in the indexer
-                    m_indexerSubsystem.indexerOn();
-                    m_sysTime = System.currentTimeMillis(); // reset the time latch
-                }
+                } 
                 break;
             case EMPTY:
                 m_indexerSubsystem.indexerOff();
